@@ -1,0 +1,61 @@
+name: Docker
+
+ # This workflow uses actions that are not certified by GitHub.
+ # They are provided by a third-party and are governed by
+ # separate terms of service, privacy policy, and support
+ # documentation.
+
+on:
+  push:
+     branches: [ "main" ]
+     # Publish semver tags as releases.
+     tags: [ 'v*.*.*' ]
+  pull_request:
+     branches: [ "main" ]
+
+env:
+   # Use docker.io for Docker Hub if empty
+   REGISTRY: ghcr.io
+   # github.repository as <account>/<repo>
+   IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-docker-container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build the docker image
+        run: |
+          export TAG='0.0.2'
+          echo "$DOCKER_PASSWORD" | docker login ghcr.io -u "$DOCKER_USERNAME" --password-stdin
+          docker-compose -f docker-compose.yaml build
+        env:
+          DOCKER_USERNAME: ${{ github.repository }}
+          DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: branch Push Docker image to github package registry
+        run: |
+          export TAG='0.0.2'
+          echo "$DOCKER_PASSWORD" | docker login ghcr.io -u "$DOCKER_USERNAME" --password-stdin
+          docker-compose -f docker-compose.yaml push
+        env:
+          DOCKER_USERNAME: ${{ github.repository }}
+          DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build the docker image with latest tag
+        run: |
+          echo "$DOCKER_PASSWORD" | docker login ghcr.io -u "$DOCKER_USERNAME" --password-stdin
+          docker-compose -f docker-compose.yaml build
+        env:
+          DOCKER_USERNAME: ${{ github.repository }}
+          DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: branch Push Docker image to github package registry with latest tag
+        run: |
+          echo "$DOCKER_PASSWORD" | docker login ghcr.io -u "$DOCKER_USERNAME" --password-stdin
+          docker-compose -f docker-compose.yaml push
+        env:
+          DOCKER_USERNAME: ${{ github.repository }}
+          DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
