@@ -82,7 +82,7 @@ jobs:
     - name: Manual Build C
       if: matrix.build-mode == 'manual'
       run: |
-        gcc -o my_program src/**/*.c -Iinclude -Llib -lmylib
+        gcc -o my_program src/**/*.c -Iinclude -Llib
       working-directory: ${{ github.workspace }}
 
 
