@@ -80,10 +80,11 @@ jobs:
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
     - name: Manual Build C
-    - if: matrix.build-mode == 'manual'
+      if: matrix.build-mode == 'manual'
       run: |
         gcc -o my_program src/*.c -Iinclude -Llib -lmylib
       working-directory: ${{ github.workspace }}
+
 
 
     - name: Perform CodeQL Analysis
