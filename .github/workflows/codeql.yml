@@ -81,7 +81,7 @@ jobs:
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
     - name: Manual Build C
       if: matrix.build-mode == 'manual'
-      run: gcc -o my_program src/**/*.c -Iinclude
+      run: gcc -o my_program src/**/*.c -Iinclude -lm -lsqlite3
       working-directory: ${{ github.workspace }}
 
 
