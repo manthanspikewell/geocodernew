@@ -83,11 +83,6 @@ jobs:
         gcc -o my_program src/*.c -Iinclude -Llib -lmylib
       working-directory: ${{ github.workspace }}
 
-    - name: Initialize CodeQL database
-      run: |
-        codeql database init my-database
-      working-directory: ${{ github.workspace }}
-
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
